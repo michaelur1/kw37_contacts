@@ -4,7 +4,7 @@ Přejmenování kontaktních pozic dětských hodinek **Canyon KW37 „Alfie“ 
 
 Hodinky umí ukládat čísla jen do deseti pevných šablon (Táta, Máma, Dědeček, …) a žádná
 aplikace k nim neexistuje. Tento program názvy šablon přepíše přímo ve firmwaru hodinek,
-přes USB‑C, bez rozebírání.
+přes USB, bez rozebírání.
 
 *English summary: a small tool that renames the 10 fixed contact slots of the Canyon KW37
 kids watch (MediaTek MT6261D) by patching the Czech UI strings in the firmware over the
@@ -33,7 +33,7 @@ Verzi firmwaru najdeš v hodinkách v menu *Version Information*.
 
 ## Co budeš potřebovat
 
-1. Windows 10/11 a datový USB‑C kabel.
+1. Windows 10/11 a datový USB kabel k hodinkám (ne pouze nabíjecí).
 2. Ovladač pro port boot ROM. Program si ho při prvním spuštění nainstaluje sám
    (samostatně to jde příkazem `kw37_contacts --install-driver`).
 
