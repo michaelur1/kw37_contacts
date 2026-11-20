@@ -13,8 +13,8 @@ boot ROM USB port. See "How it works" below.*
 > **Vyloučení odpovědnosti.** Program zapisuje do paměti hodinek. Používáš ho výhradně na
 > vlastní riziko. Autor neposkytuje žádnou záruku a nenese odpovědnost za poškození
 > zařízení, ztrátu dat, ztrátu záruky výrobce ani jiné škody vzniklé jeho použitím.
-> Před první změnou si udělej zálohu (`--dump`). Podporovaná je jen jedna verze firmwaru
-> (viz níže); u jiné program skončí, aniž by cokoli zapsal.
+> Při prvním použití si program sám uloží zálohu celé paměti. Podporovaná je jen jedna verze
+> firmwaru (viz níže); u jiné program skončí, aniž by cokoli zapsal.
 >
 > **Disclaimer.** This tool writes to the watch's flash memory. Use it entirely at your own
 > risk. It is provided "as is", without warranty of any kind; the author is not liable for
@@ -34,15 +34,14 @@ Verzi firmwaru najdeš v hodinkách v menu *Version Information*.
 ## Co budeš potřebovat
 
 1. Windows 10/11 a datový USB kabel k hodinkám (ne pouze nabíjecí).
-2. Ovladač pro port boot ROM. Program si ho při prvním spuštění nainstaluje sám
-   (samostatně to jde příkazem `kw37_contacts --install-driver`).
+2. Ovladač pro port boot ROM. Program si ho při prvním spuštění nainstaluje sám.
 
    Windows se zeptá na oprávnění správce. Program přiřadí portu hodinek (USB `0E8D:0003`)
    sériový ovladač `usbser.sys`, který je součástí Windows. Protože Windows vyžadují
    podepsaný instalační balíček, vytvoří se na tvém počítači jednorázový certifikát
    „kw37-contacts BROM driver (self-signed)“, zařadí se mezi důvěryhodné a jeho soukromý
    klíč se hned smaže (stejný postup používá Zadig). Vše odebereš příkazem
-   `kw37_contacts --remove-driver`.
+   `python kw37_contacts.py --remove-driver`.
 
    Náhradní postup: program [Zadig](https://zadig.akeo.ie), *Device → Create New Device*,
    USB ID `0E8D` `0003`, ovladač **USB Serial (CDC)**, *Install Driver*.
@@ -54,25 +53,28 @@ Verzi firmwaru najdeš v hodinkách v menu *Version Information*.
 
 ## Použití
 
-Stačí spustit **`KW37-Kontakty.exe`** (okno) a kliknout na „Připojit hodinky“.
-Totéž umí v příkazové řádce `kw37_contacts.exe` (nebo `python kw37_contacts.py`).
-Program postupně:
+Stačí spustit **`KW37-Kontakty.exe`** a kliknout na „Připojit hodinky“. Program postupně:
 
 1. zkontroluje ovladač a když chybí, sám ho nainstaluje (jednou potvrdíš oprávnění správce),
 2. vyzve tě k připojení **vypnutých** hodinek a port si najde sám,
 3. při prvním použití uloží vedle sebe zálohu celé paměti (`kw37_zaloha_*.bin`),
-4. vypíše aktuální názvy; u každé pozice napíšeš nový název, nebo jen Enter,
-5. ukáže souhrn, po napsání `ANO` zapíše změny a ověří je.
+4. načte aktuální názvy do polí, kde je upravíš,
+5. po kliknutí na „Zapsat do hodinek“ ukáže souhrn, zapíše změny a ověří je.
 
-Pak odpoj kabel a hodinky zapni. Port lze zadat i ručně: `kw37_contacts.exe COM5`.
+Pak odpoj kabel a hodinky zapni. Tlačítko „Tovární názvy“ předvyplní původní texty.
 
-Další volby:
+### Příkazová řádka
+
+Totéž a pár věcí navíc umí skript `kw37_contacts.py` (Python 3.9+, `pip install pyserial`):
 
 ```
-kw37_contacts --dump zaloha.bin        záloha celé flash (jen čtení) – udělej jako první!
-kw37_contacts --factory                vrátí tovární názvy
-kw37_contacts --set 7=Sofie --yes      bez dotazování
-kw37_contacts --offline zaloha.bin --set 7=Sofie   zkouška nad zálohou, bez hodinek
+python kw37_contacts.py                       stejný postup v textovém režimu
+python kw37_contacts.py --dump zaloha.bin     záloha celé flash (jen čtení)
+python kw37_contacts.py --factory             vrátí tovární názvy
+python kw37_contacts.py --set 7=Sofie --yes   bez dotazování
+python kw37_contacts.py --offline zaloha.bin --set 7=Sofie   zkouška nad zálohou, bez hodinek
+python kw37_contacts.py --remove-driver       odebere ovladač i jeho certifikát
+python kw37_contacts.py COM5                  ruční zadání portu
 ```
 
 Záloha obsahuje i osobní data (uložená čísla, IMEI). Nikam ji nenahrávej.
